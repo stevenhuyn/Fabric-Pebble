@@ -8,9 +8,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
-public class FabricItem extends Item {
+public class FabricPebble extends Item {
 
-    public FabricItem(Settings settings) {
+    public FabricPebble(Settings settings) {
         super(settings);
     }
 

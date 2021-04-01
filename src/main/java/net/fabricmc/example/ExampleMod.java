@@ -18,14 +18,14 @@ public class ExampleMod implements ModInitializer {
 	public static final ItemGroup OTHER_GROUP = FabricItemGroupBuilder.create(new Identifier("tutorial", "other"))
 			.icon(() -> new ItemStack(Items.BOWL)).build();
 
-	public static final FabricItem FABRIC_ITEM = new FabricItem(new FabricItemSettings().group(OTHER_GROUP));
+	public static final FabricPebble FABRIC_PEBBLE = new FabricPebble(new FabricItemSettings().group(OTHER_GROUP));
 
 	@Override
 	public void onInitialize() {
 		// This code runs as soon as Minecraft is in a mod-load-ready state.
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
-		Registry.register(Registry.ITEM, new Identifier("tutorial", "fabric_item"), FABRIC_ITEM);
+		Registry.register(Registry.ITEM, new Identifier("tutorial", "fabric_pebble"), FABRIC_PEBBLE);
 
 		System.out.println("Hello Fabric world!");
 	}
