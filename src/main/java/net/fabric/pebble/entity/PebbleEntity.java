@@ -21,6 +21,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class PebbleEntity extends ThrownItemEntity {
@@ -65,7 +66,7 @@ public class PebbleEntity extends ThrownItemEntity {
     // (OPTIONAL)
     private ParticleEffect getParticleParameters() {
         ItemStack itemStack = this.getItem();
-        return (ParticleEffect) (itemStack.isEmpty() ? ParticleTypes.ITEM_SNOWBALL
+        return (ParticleEffect) (itemStack.isEmpty() ? ParticleTypes.CRIT
                 : new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack));
     }
 
@@ -85,10 +86,12 @@ public class PebbleEntity extends ThrownItemEntity {
 
     @Override
     public void tick() {
+        Vec3d velocity = this.getVelocity();
         super.tick();
         ParticleEffect particleEffect = this.getParticleParameters();
         for (int i = 0; i < 8; ++i) {
-            this.world.addParticle(particleEffect, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+            this.world.addParticle(particleEffect, this.getX() - velocity.x, this.getY() - velocity.y,
+                    this.getZ() - velocity.z, 0, 0, 0);
         }
     }
 
