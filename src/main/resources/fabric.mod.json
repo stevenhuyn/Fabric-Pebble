@@ -17,6 +17,9 @@
   "entrypoints": {
     "main": [
       "net.fabric.pebble.PebbleMod"
+    ],
+    "client": [
+      "net.fabric.pebble.client.PebbleModClient"
     ]
   },
   "mixins": [
