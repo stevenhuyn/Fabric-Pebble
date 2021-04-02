@@ -2,7 +2,7 @@
 
 ## Throw Pebbles!
 
-![Throwing a pebble at an iron golem who ends up killing me](/media/pebble.gif "Logo Title Text 1")
+![Throwing a pebble at an iron golem who ends up killing me](/media/pebble.gif)
 
 ## Setup
 
