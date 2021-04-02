@@ -1,8 +1,16 @@
-# Fabric Example Mod
+# Fabric Pebble Mod
+
+## Throw Pebbles!
+
+![Throwing a pebble at an iron golem who ends up killing me](/media/pebble.gif "Logo Title Text 1")
 
 ## Setup
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+Requires the [fabric loader](https://fabricmc.net/use/)
+
+Minecraft Version:  `Minecraft 1.16.x`
+
+Fabric Version:     `0.32.5+1.16`
 
 ## License
 
