@@ -1,4 +1,4 @@
-package net.fabricmc.example;
+package net.fabric.pebble.item;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -7,18 +7,17 @@ import net.minecraft.item.ArrowItem;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
-public class FabricPebble extends BowItem {
+public class PebbleItem extends BowItem {
 
     public static float baseForce = 10f;
     public static float chargeTime = 10f;
 
-    public FabricPebble(Settings settings) {
+    public PebbleItem(Settings settings) {
         super(settings);
     }
 

@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "tutorial:item/fabric_pebble"
+        "layer0": "fabric_pebble_mod:item/pebble"
     }
 }
