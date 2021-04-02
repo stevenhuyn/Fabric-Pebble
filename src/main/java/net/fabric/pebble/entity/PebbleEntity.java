@@ -56,9 +56,6 @@ public class PebbleEntity extends ThrownItemEntity {
         // checks if entity is an instance of LivingEntity (meaning it is not a boat or
         // minecart)
         if (entity instanceof LivingEntity) {
-            ((LivingEntity) entity).addStatusEffect((new StatusEffectInstance(StatusEffects.BLINDNESS, 20 * 3, 0)));
-            ((LivingEntity) entity).addStatusEffect((new StatusEffectInstance(StatusEffects.SLOWNESS, 20 * 3, 2)));
-            ((LivingEntity) entity).addStatusEffect((new StatusEffectInstance(StatusEffects.POISON, 20 * 3, 1)));
             entity.playSound(SoundEvents.BLOCK_SNOW_STEP, 2F, 1F);
         }
     }
