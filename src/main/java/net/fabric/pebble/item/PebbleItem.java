@@ -18,8 +18,8 @@ import net.minecraft.world.World;
 
 public class PebbleItem extends BowItem {
 
-    public static float baseForce = 10f;
-    public static float chargeTime = 10f;
+    public static float baseForce = 3f;
+    public static int maxChargeTimeTicks = 22;
 
     public PebbleItem(Settings settings) {
         super(settings);
@@ -44,9 +44,11 @@ public class PebbleItem extends BowItem {
          * cooldown to your item's right-click use, similar to Ender Pearls.
          */
         if (!world.isClient) {
+            int useTicks = this.getMaxUseTime(itemStack) - remainingUseTicks;
             PebbleEntity pebbleEntity = new PebbleEntity(world, livingEntity);
             pebbleEntity.setItem(itemStack);
-            pebbleEntity.setProperties(livingEntity, livingEntity.pitch, livingEntity.yaw, 0.0F, 0.3F, 0F);
+            pebbleEntity.setProperties(livingEntity, livingEntity.pitch, livingEntity.yaw, 0.0f,
+                    getPebblePullProgress(useTicks) * baseForce, 0f);
             world.spawnEntity(pebbleEntity); // spawns entity
         }
 
@@ -54,5 +56,9 @@ public class PebbleItem extends BowItem {
         if (!playerEntity.abilities.creativeMode) {
             itemStack.decrement(1); // decrements itemStack if user is not in creative mode
         }
+    }
+
+    public float getPebblePullProgress(int useTicks) {
+        return useTicks > maxChargeTimeTicks ? 1f : (float) useTicks / maxChargeTimeTicks;
     }
 }
