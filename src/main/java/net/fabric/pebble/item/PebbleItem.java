@@ -44,10 +44,10 @@ public class PebbleItem extends BowItem {
          * cooldown to your item's right-click use, similar to Ender Pearls.
          */
         if (!world.isClient) {
-            PebbleEntity snowballEntity = new PebbleEntity(world, livingEntity);
-            snowballEntity.setItem(itemStack);
-            snowballEntity.setProperties(livingEntity, livingEntity.pitch, livingEntity.yaw, 0.0F, 1.5F, 0F);
-            world.spawnEntity(snowballEntity); // spawns entity
+            PebbleEntity pebbleEntity = new PebbleEntity(world, livingEntity);
+            pebbleEntity.setItem(itemStack);
+            pebbleEntity.setProperties(livingEntity, livingEntity.pitch, livingEntity.yaw, 0.0F, 0.3F, 0F);
+            world.spawnEntity(pebbleEntity); // spawns entity
         }
 
         playerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
