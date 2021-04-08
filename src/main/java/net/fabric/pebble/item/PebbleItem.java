@@ -1,6 +1,10 @@
 package net.fabric.pebble.item;
 
+import net.fabric.pebble.PebbleMod;
 import net.fabric.pebble.entity.PebbleEntity;
+import net.fabric.pebble.networking.PebbleModNetworkingConstants;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -8,11 +12,14 @@ import net.minecraft.item.ArrowItem;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
@@ -50,12 +57,17 @@ public class PebbleItem extends BowItem {
             pebbleEntity.setProperties(livingEntity, livingEntity.pitch, livingEntity.yaw, 0.0f,
                     getPebblePullProgress(useTicks) * baseForce, 0f);
             world.spawnEntity(pebbleEntity); // spawns entity
+
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeBlockPos(pebbleEntity.getBlockPos());
+            ServerPlayNetworking.send((ServerPlayerEntity) livingEntity, PebbleMod.PEBBLE_PACKET_ID, buf);
         }
 
         playerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
         if (!playerEntity.abilities.creativeMode) {
             itemStack.decrement(1); // decrements itemStack if user is not in creative mode
         }
+
     }
 
     public float getPebblePullProgress(int useTicks) {

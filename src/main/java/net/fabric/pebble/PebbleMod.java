@@ -15,6 +15,7 @@ import net.minecraft.util.registry.Registry;
 
 public class PebbleMod implements ModInitializer {
 
+	public static final Identifier PEBBLE_PACKET_ID = new Identifier(PebbleMod.MOD_ID, "pebble_packet");
 	public static final String MOD_ID = "fabric_pebble_mod";
 
 	public static final Item PebbleItem = new PebbleItem(new FabricItemSettings().group(ItemGroup.COMBAT));
@@ -25,6 +26,7 @@ public class PebbleMod implements ModInitializer {
 					.trackRangeBlocks(4).trackedUpdateRate(10) // necessary for all thrown projectiles (as it prevents
 																// it from breaking, lol)
 					.build() // VERY IMPORTANT DONT DELETE FOR THE LOVE OF GOD PSLSSSSSS
+
 	);
 
 	@Override
