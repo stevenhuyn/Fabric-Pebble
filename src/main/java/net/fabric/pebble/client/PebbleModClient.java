@@ -46,11 +46,11 @@ public class PebbleModClient implements ClientModInitializer {
 							client.world.addParticle(particleEffect, pos.getX(), pos.getY(), pos.getZ(), 0, 0, 0);
 						}
 
-						if (MinecraftClient.getInstance().world == null) {
+						if (client.world == null) {
 							throw new IllegalStateException("Tried to spawn entity in a null world!");
 						}
 
-						Entity e = et.create(MinecraftClient.getInstance().world);
+						Entity e = et.create(client.world);
 						if (e == null) {
 							throw new IllegalStateException(
 									"Failed to create instance of entity \"" + Registry.ENTITY_TYPE.getId(et) + "\"!");
@@ -62,7 +62,7 @@ public class PebbleModClient implements ClientModInitializer {
 						e.yaw = yaw;
 						e.setEntityId(entityId);
 						e.setUuid(uuid);
-						MinecraftClient.getInstance().world.addEntity(entityId, e);
+						client.world.addEntity(entityId, e);
 					});
 				});
 	}
