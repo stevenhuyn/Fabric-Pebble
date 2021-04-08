@@ -53,7 +53,7 @@ public class PebbleEntity extends ThrownItemEntity {
     protected void onEntityHit(EntityHitResult entityHitResult) { // called on entity hit.
         super.onEntityHit(entityHitResult);
         Entity entity = entityHitResult.getEntity(); // sets a new Entity instance as the EntityHitResult (victim)
-        int damage = 4;
+        int damage = isCritical ? 3 : 4;
         entity.damage(DamageSource.thrownProjectile(this, this.getOwner()), (float) damage); // deals damage
 
         // checks if entity is an instance of LivingEntity (meaning it is not a boat or
