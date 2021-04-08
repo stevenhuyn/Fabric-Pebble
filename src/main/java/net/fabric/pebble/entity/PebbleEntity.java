@@ -44,7 +44,7 @@ public class PebbleEntity extends ThrownItemEntity {
 
     @Override
     public Packet createSpawnPacket() {
-        return EntitySpawnPacket.create(this, PebbleModClient.PacketID);
+        return EntitySpawnPacket.create(this, PebbleModClient.PEBBLE_PACKET_ID);
     }
 
     protected void onEntityHit(EntityHitResult entityHitResult) { // called on entity hit.

@@ -1,6 +1,7 @@
 package net.fabric.pebble.item;
 
 import net.fabric.pebble.PebbleMod;
+import net.fabric.pebble.client.PebbleModClient;
 import net.fabric.pebble.entity.PebbleEntity;
 import net.fabric.pebble.networking.PebbleModNetworkingConstants;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -58,9 +59,10 @@ public class PebbleItem extends BowItem {
                     getPebblePullProgress(useTicks) * baseForce, 0f);
             world.spawnEntity(pebbleEntity); // spawns entity
 
-            PacketByteBuf buf = PacketByteBufs.create();
-            buf.writeBlockPos(pebbleEntity.getBlockPos());
-            ServerPlayNetworking.send((ServerPlayerEntity) livingEntity, PebbleMod.PEBBLE_PACKET_ID, buf);
+            // PacketByteBuf buf = PacketByteBufs.create();
+            // buf.writeBlockPos(pebbleEntity.getBlockPos());
+            // ServerPlayNetworking.send((ServerPlayerEntity) livingEntity,
+            // PebbleModClient.PEBBLE_PACKET_ID, buf);
         }
 
         playerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
