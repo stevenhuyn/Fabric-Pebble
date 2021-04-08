@@ -14,8 +14,8 @@ import net.minecraft.world.World;
 
 public class PebbleItem extends BowItem {
 
-    public static float baseForce = 3f;
-    public static int maxChargeTimeTicks = 22;
+    public static final float baseForce = 3f;
+    public static final int maxChargeTimeTicks = 22;
 
     public PebbleItem(Settings settings) {
         super(settings);
@@ -42,7 +42,7 @@ public class PebbleItem extends BowItem {
 
         if (!world.isClient) {
             int useTicks = this.getMaxUseTime(itemStack) - remainingUseTicks;
-            Boolean isCritical = useTicks > 25;
+            Boolean isCritical = useTicks >= maxChargeTimeTicks;
             PebbleEntity pebbleEntity = new PebbleEntity(world, livingEntity, isCritical);
             pebbleEntity.setItem(itemStack);
             pebbleEntity.setProperties(livingEntity, livingEntity.pitch, livingEntity.yaw, 0.0f,
