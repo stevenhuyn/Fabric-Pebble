@@ -44,7 +44,7 @@ public class PebbleEntity extends ThrownItemEntity {
 
     @Override
     public Packet createSpawnPacket() {
-        return EntitySpawnPacket.create(this, PebbleModClient.PacketID);
+        return EntitySpawnPacket.create(this, PebbleModClient.PEBBLE_PACKET_ID);
     }
 
     protected void onEntityHit(EntityHitResult entityHitResult) { // called on entity hit.
@@ -81,17 +81,6 @@ public class PebbleEntity extends ThrownItemEntity {
             }
         }
 
-    }
-
-    @Override
-    public void tick() {
-        Vec3d velocity = this.getVelocity();
-        super.tick();
-        ParticleEffect particleEffect = this.getParticleParameters();
-        for (int i = 0; i < 8; ++i) {
-            this.world.addParticle(particleEffect, this.getX() - velocity.x, this.getY() - velocity.y,
-                    this.getZ() - velocity.z, 0, 0, 0);
-        }
     }
 
     // called on collision with a block
