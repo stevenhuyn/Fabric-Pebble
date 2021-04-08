@@ -25,12 +25,19 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class PebbleEntity extends ThrownItemEntity {
+    public Boolean isCritical = false;
+
     public PebbleEntity(EntityType<? extends ThrownItemEntity> entityType, World world) {
         super(entityType, world);
     }
 
     public PebbleEntity(World world, LivingEntity owner) {
         super(PebbleMod.PebbleEntityType, owner, world);
+    }
+
+    public PebbleEntity(World world, LivingEntity owner, Boolean isCritical) {
+        super(PebbleMod.PebbleEntityType, owner, world);
+        this.isCritical = isCritical;
     }
 
     public PebbleEntity(World world, double x, double y, double z) {
@@ -43,8 +50,8 @@ public class PebbleEntity extends ThrownItemEntity {
     }
 
     @Override
-    public Packet createSpawnPacket() {
-        return EntitySpawnPacket.create(this, PebbleModClient.PEBBLE_PACKET_ID);
+    public Packet<?> createSpawnPacket() {
+        return EntitySpawnPacket.create(this, PebbleModClient.PEBBLE_PACKET_ID, isCritical);
     }
 
     protected void onEntityHit(EntityHitResult entityHitResult) { // called on entity hit.
@@ -91,6 +98,18 @@ public class PebbleEntity extends ThrownItemEntity {
             // particle?
             this.world.sendEntityStatus(this, (byte) 3);
             this.remove(); // kills the projectile
+        }
+    }
+
+    public void tick() {
+        super.tick();
+        if (this.world.isClient) {
+            if (isCritical) {
+                ParticleEffect particleEffect = (ParticleEffect) ParticleTypes.CRIT;
+                for (int i = 0; i < 8; ++i) {
+                    this.world.addParticle(particleEffect, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+                }
+            }
         }
 
     }

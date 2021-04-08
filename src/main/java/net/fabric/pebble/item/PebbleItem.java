@@ -53,7 +53,8 @@ public class PebbleItem extends BowItem {
          */
         if (!world.isClient) {
             int useTicks = this.getMaxUseTime(itemStack) - remainingUseTicks;
-            PebbleEntity pebbleEntity = new PebbleEntity(world, livingEntity);
+            Boolean isCritical = useTicks > 25;
+            PebbleEntity pebbleEntity = new PebbleEntity(world, livingEntity, isCritical);
             pebbleEntity.setItem(itemStack);
             pebbleEntity.setProperties(livingEntity, livingEntity.pitch, livingEntity.yaw, 0.0f,
                     getPebblePullProgress(useTicks) * baseForce, 0f);

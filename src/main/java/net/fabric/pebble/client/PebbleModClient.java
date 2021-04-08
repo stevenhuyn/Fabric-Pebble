@@ -2,6 +2,7 @@ package net.fabric.pebble.client;
 
 import net.fabric.pebble.PebbleMod;
 import net.fabric.pebble.entity.EntitySpawnPacket;
+import net.fabric.pebble.entity.PebbleEntity;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
@@ -32,37 +33,34 @@ public class PebbleModClient implements ClientModInitializer {
 		ClientPlayNetworking.registerGlobalReceiver(PebbleModClient.PEBBLE_PACKET_ID,
 				(client, handler, byteBuf, responseSender) -> {
 					// Read packet data on the event loop
-					EntityType<?> et = Registry.ENTITY_TYPE.get(byteBuf.readVarInt());
+					EntityType<?> pebbleEntityType = Registry.ENTITY_TYPE.get(byteBuf.readVarInt());
 					UUID uuid = byteBuf.readUuid();
 					int entityId = byteBuf.readVarInt();
 					Vec3d pos = EntitySpawnPacket.PacketBufUtil.readVec3d(byteBuf);
 					float pitch = EntitySpawnPacket.PacketBufUtil.readAngle(byteBuf);
 					float yaw = EntitySpawnPacket.PacketBufUtil.readAngle(byteBuf);
+					Boolean isCritical = byteBuf.readBoolean();
 
 					client.execute(() -> {
 						// Everything in this lambda is run on the render thread
-						ParticleEffect particleEffect = (ParticleEffect) ParticleTypes.EXPLOSION;
-						for (int i = 0; i < 8; ++i) {
-							client.world.addParticle(particleEffect, pos.getX(), pos.getY(), pos.getZ(), 0, 0, 0);
-						}
-
 						if (client.world == null) {
 							throw new IllegalStateException("Tried to spawn entity in a null world!");
 						}
 
-						Entity e = et.create(client.world);
-						if (e == null) {
-							throw new IllegalStateException(
-									"Failed to create instance of entity \"" + Registry.ENTITY_TYPE.getId(et) + "\"!");
+						PebbleEntity pebbleEntity = (PebbleEntity) pebbleEntityType.create(client.world);
+						if (pebbleEntity == null) {
+							throw new IllegalStateException("Failed to create instance of entity \""
+									+ Registry.ENTITY_TYPE.getId(pebbleEntityType) + "\"!");
 						}
 
-						e.updateTrackedPosition(pos);
-						e.setPos(pos.x, pos.y, pos.z);
-						e.pitch = pitch;
-						e.yaw = yaw;
-						e.setEntityId(entityId);
-						e.setUuid(uuid);
-						client.world.addEntity(entityId, e);
+						pebbleEntity.updateTrackedPosition(pos);
+						pebbleEntity.setPos(pos.x, pos.y, pos.z);
+						pebbleEntity.pitch = pitch;
+						pebbleEntity.yaw = yaw;
+						pebbleEntity.setEntityId(entityId);
+						pebbleEntity.setUuid(uuid);
+						pebbleEntity.isCritical = isCritical;
+						client.world.addEntity(entityId, pebbleEntity);
 					});
 				});
 	}
