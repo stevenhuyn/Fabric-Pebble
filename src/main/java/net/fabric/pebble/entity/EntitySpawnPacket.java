@@ -14,6 +14,7 @@ public class EntitySpawnPacket {
     public static Packet<?> create(Entity e, Identifier packetID, Boolean isCritical) {
         if (e.world.isClient)
             throw new IllegalStateException("SpawnPacketUtil.create called on the logical client!");
+
         PacketByteBuf byteBuf = new PacketByteBuf(Unpooled.buffer());
         byteBuf.writeVarInt(Registry.ENTITY_TYPE.getRawId(e.getType()));
         byteBuf.writeUuid(e.getUuid());
@@ -24,7 +25,6 @@ public class EntitySpawnPacket {
         PacketBufUtil.writeAngle(byteBuf, e.yaw);
 
         byteBuf.writeBoolean(isCritical);
-        System.out.println("Server: " + isCritical.toString());
         return ServerPlayNetworking.createS2CPacket(packetID, byteBuf);
     }
 

@@ -6,17 +6,11 @@ import net.fabric.pebble.entity.PebbleEntity;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
 
 import java.util.UUID;
 
@@ -28,8 +22,7 @@ public class PebbleModClient implements ClientModInitializer {
 		EntityRendererRegistry.INSTANCE.register(PebbleMod.PebbleEntityType,
 				(dispatcher, context) -> new FlyingItemEntityRenderer<>(dispatcher, context.getItemRenderer()));
 
-		// We associate PLAY_PARTICLE_PACKET_ID with this callback, so the server can
-		// then use that id to execute the callback.
+		// What happens when the server speaks to client about the Pebble Entity
 		ClientPlayNetworking.registerGlobalReceiver(PebbleModClient.PEBBLE_PACKET_ID,
 				(client, handler, byteBuf, responseSender) -> {
 					// Read packet data on the event loop
