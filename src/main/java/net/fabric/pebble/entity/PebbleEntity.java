@@ -103,6 +103,7 @@ public class PebbleEntity extends ThrownItemEntity {
             if (isCritical) {
                 ParticleEffect particleEffect = (ParticleEffect) ParticleTypes.CRIT;
                 for (int i = 0; i < 8; ++i) {
+                    // TODO: Centre the particle effects
                     this.world.addParticle(particleEffect, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
                 }
             }
