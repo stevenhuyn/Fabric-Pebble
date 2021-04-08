@@ -24,7 +24,10 @@ public class PebbleItem extends BowItem {
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity playerEntity, Hand hand) {
         ItemStack itemStack = playerEntity.getStackInHand(hand);
+
+        // Appears to do the drawback animation like a bow
         playerEntity.setCurrentHand(hand);
+
         return TypedActionResult.consume(itemStack);
     }
 
