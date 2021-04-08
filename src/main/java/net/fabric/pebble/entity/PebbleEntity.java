@@ -8,9 +8,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.BlazeEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,16 +18,22 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class PebbleEntity extends ThrownItemEntity {
+    public Boolean isCritical = false;
+
     public PebbleEntity(EntityType<? extends ThrownItemEntity> entityType, World world) {
         super(entityType, world);
     }
 
     public PebbleEntity(World world, LivingEntity owner) {
         super(PebbleMod.PebbleEntityType, owner, world);
+    }
+
+    public PebbleEntity(World world, LivingEntity owner, Boolean isCritical) {
+        super(PebbleMod.PebbleEntityType, owner, world);
+        this.isCritical = isCritical;
     }
 
     public PebbleEntity(World world, double x, double y, double z) {
@@ -43,14 +46,14 @@ public class PebbleEntity extends ThrownItemEntity {
     }
 
     @Override
-    public Packet createSpawnPacket() {
-        return EntitySpawnPacket.create(this, PebbleModClient.PEBBLE_PACKET_ID);
+    public Packet<?> createSpawnPacket() {
+        return EntitySpawnPacket.create(this, PebbleModClient.PEBBLE_PACKET_ID, isCritical);
     }
 
     protected void onEntityHit(EntityHitResult entityHitResult) { // called on entity hit.
         super.onEntityHit(entityHitResult);
         Entity entity = entityHitResult.getEntity(); // sets a new Entity instance as the EntityHitResult (victim)
-        int damage = 4;
+        int damage = isCritical ? 3 : 4;
         entity.damage(DamageSource.thrownProjectile(this, this.getOwner()), (float) damage); // deals damage
 
         // checks if entity is an instance of LivingEntity (meaning it is not a boat or
@@ -91,6 +94,18 @@ public class PebbleEntity extends ThrownItemEntity {
             // particle?
             this.world.sendEntityStatus(this, (byte) 3);
             this.remove(); // kills the projectile
+        }
+    }
+
+    public void tick() {
+        super.tick();
+        if (this.world.isClient) {
+            if (isCritical) {
+                ParticleEffect particleEffect = (ParticleEffect) ParticleTypes.CRIT;
+                for (int i = 0; i < 8; ++i) {
+                    this.world.addParticle(particleEffect, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+                }
+            }
         }
 
     }

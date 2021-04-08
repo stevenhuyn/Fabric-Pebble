@@ -11,9 +11,10 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 
 public class EntitySpawnPacket {
-    public static Packet<?> create(Entity e, Identifier packetID) {
+    public static Packet<?> create(Entity e, Identifier packetID, Boolean isCritical) {
         if (e.world.isClient)
             throw new IllegalStateException("SpawnPacketUtil.create called on the logical client!");
+
         PacketByteBuf byteBuf = new PacketByteBuf(Unpooled.buffer());
         byteBuf.writeVarInt(Registry.ENTITY_TYPE.getRawId(e.getType()));
         byteBuf.writeUuid(e.getUuid());
@@ -22,6 +23,8 @@ public class EntitySpawnPacket {
         PacketBufUtil.writeVec3d(byteBuf, e.getPos());
         PacketBufUtil.writeAngle(byteBuf, e.pitch);
         PacketBufUtil.writeAngle(byteBuf, e.yaw);
+
+        byteBuf.writeBoolean(isCritical);
         return ServerPlayNetworking.createS2CPacket(packetID, byteBuf);
     }
 
