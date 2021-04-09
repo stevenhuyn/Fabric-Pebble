@@ -19,3 +19,4 @@ This template is available under the CC0 license. Feel free to learn from it and
 ## Handling New Releases
 - Update the gradle.properties mod version
 - Run `gradlew build`
+- You can find the `.jar` in `./build/libs/`
