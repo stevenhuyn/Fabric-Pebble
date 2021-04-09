@@ -4,6 +4,8 @@
 
 ![Throwing a pebble at an iron golem who ends up killing me](/media/pebble.gif)
 
+![Crafting Recipe, Shapeless 1 cobble -> 4 pebbles](/media/recipe.png)
+
 ## Setup
 
 Requires the [fabric loader](https://fabricmc.net/use/)
