@@ -77,7 +77,7 @@ public class PebbleEntity extends ThrownItemEntity {
     public void handleStatus(byte status) {
         if (status == 3) {
             ParticleEffect particleEffect = this.getParticleParameters();
-            for (int i = 0; i < 8; ++i) {
+            for (int i = 0; i < 3; ++i) {
                 this.world.addParticle(particleEffect, this.getX(), this.getY(), this.getZ(),
                         this.random.nextGaussian() * 0.2D, 0.01D, this.random.nextGaussian() * 0.2D);
             }
