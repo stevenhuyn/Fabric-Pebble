@@ -67,9 +67,7 @@ public class PebbleEntity extends ThrownItemEntity {
     // Not entirely sure, but probably has do to with the snowball's particles.
     // (OPTIONAL)
     private ParticleEffect getParticleParameters() {
-        ItemStack itemStack = this.getItem();
-        return (ParticleEffect) (itemStack.isEmpty() ? ParticleTypes.CRIT
-                : new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack));
+        return (ParticleEffect) new ItemStackParticleEffect(ParticleTypes.ITEM, PebbleMod.PebbleItem.getDefaultStack());
     }
 
     @Environment(EnvType.CLIENT)
@@ -79,11 +77,11 @@ public class PebbleEntity extends ThrownItemEntity {
     public void handleStatus(byte status) {
         if (status == 3) {
             ParticleEffect particleEffect = this.getParticleParameters();
-            for (int i = 0; i < 8; ++i) {
-                this.world.addParticle(particleEffect, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+            for (int i = 0; i < 3; ++i) {
+                this.world.addParticle(particleEffect, this.getX(), this.getY(), this.getZ(),
+                        this.random.nextGaussian() * 0.2D, 0.01D, this.random.nextGaussian() * 0.2D);
             }
         }
-
     }
 
     // called on collision with a block
