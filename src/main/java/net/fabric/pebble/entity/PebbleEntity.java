@@ -78,10 +78,10 @@ public class PebbleEntity extends ThrownItemEntity {
         if (status == 3) {
             ParticleEffect particleEffect = this.getParticleParameters();
             for (int i = 0; i < 8; ++i) {
-                this.world.addParticle(particleEffect, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+                this.world.addParticle(particleEffect, this.getX(), this.getY(), this.getZ(),
+                        this.random.nextGaussian() * 0.2D, 0.01D, this.random.nextGaussian() * 0.2D);
             }
         }
-
     }
 
     // called on collision with a block
