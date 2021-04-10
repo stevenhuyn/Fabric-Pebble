@@ -49,7 +49,7 @@ public class PebbleItem extends BowItem {
             PebbleEntity pebbleEntity = new PebbleEntity(world, livingEntity, isCritical);
             pebbleEntity.setItem(itemStack);
             pebbleEntity.setProperties(livingEntity, livingEntity.pitch, livingEntity.yaw, 0.0f,
-                    getPebblePullProgress(useTicks) * baseForce, 0f);
+                    getPullMultiplier(useTicks) * baseForce, 0f);
 
             // Spawns Entity Serverside with the given entity data
             // I assume this calls PebbleEntity::createSpawnPacket
@@ -64,7 +64,12 @@ public class PebbleItem extends BowItem {
 
     }
 
-    public float getPebblePullProgress(int useTicks) {
-        return useTicks > maxChargeTimeTicks ? 1f : (float) useTicks / maxChargeTimeTicks;
+    // The power of the sigmoid function!! hazzuh!
+    public float getPullMultiplier(int useTicks) {
+        // Gets progress between 0 < 1
+        float progress = useTicks > maxChargeTimeTicks ? 1F : (float) useTicks / maxChargeTimeTicks;
+
+        // Modifies by a sigmoid variant function
+        return (1F / (1F + (float) Math.exp(-10 * (progress - 0.3F))));
     }
 }
