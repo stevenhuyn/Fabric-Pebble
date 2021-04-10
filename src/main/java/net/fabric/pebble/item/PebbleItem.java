@@ -14,8 +14,9 @@ import net.minecraft.world.World;
 
 public class PebbleItem extends BowItem {
 
-    public static final float baseForce = 3f;
+    public static final float baseForce = 1.5f;
     public static final int maxChargeTimeTicks = 22;
+    public static final int minChargeTimeTicks = 3;
 
     public PebbleItem(Settings settings) {
         super(settings);
@@ -35,9 +36,6 @@ public class PebbleItem extends BowItem {
     public void onStoppedUsing(ItemStack itemStack, World world, LivingEntity livingEntity, int remainingUseTicks) {
         PlayerEntity playerEntity = (PlayerEntity) livingEntity;
 
-        world.playSound(null, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(),
-                SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 1F); // plays a globalSoundEvent
-
         /*
          * user.getItemCooldownManager().set(this, 5); Optionally, you can add a
          * cooldown to your item's right-click use, similar to Ender Pearls.
@@ -45,6 +43,14 @@ public class PebbleItem extends BowItem {
 
         if (!world.isClient) {
             int useTicks = this.getMaxUseTime(itemStack) - remainingUseTicks;
+
+            if (useTicks < minChargeTimeTicks) {
+                return;
+            }
+
+            world.playSound(null, livingEntity.getX(), livingEntity.getY(), livingEntity.getZ(),
+                    SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 1F); // plays a globalSoundEvent
+
             Boolean isCritical = useTicks >= maxChargeTimeTicks;
             PebbleEntity pebbleEntity = new PebbleEntity(world, livingEntity, isCritical);
             pebbleEntity.setItem(itemStack);
