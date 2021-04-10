@@ -67,9 +67,7 @@ public class PebbleEntity extends ThrownItemEntity {
     // Not entirely sure, but probably has do to with the snowball's particles.
     // (OPTIONAL)
     private ParticleEffect getParticleParameters() {
-        ItemStack itemStack = this.getItem();
-        return (ParticleEffect) (itemStack.isEmpty() ? ParticleTypes.CRIT
-                : new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack));
+        return (ParticleEffect) new ItemStackParticleEffect(ParticleTypes.ITEM, PebbleMod.PebbleItem.getDefaultStack());
     }
 
     @Environment(EnvType.CLIENT)
