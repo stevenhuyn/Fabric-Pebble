@@ -35,7 +35,7 @@ public abstract class HeldItemRendererMixin {
     public abstract void renderItem(LivingEntity entity, ItemStack stack, ModelTransformation.Mode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light);
 
 
-    @Inject(at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/client/util/math/MatrixStack;push()V"), method = "renderFirstPersonItem", cancellable = true)
+    @Inject(at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/item/ItemStack;getUseAction()Lnet/minecraft/util/UseAction;"), method = "renderFirstPersonItem", cancellable = true)
     private void init(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo info) {
 
         // Code below largely collected from HeldItemRenderer.renderFirstPersonItem
@@ -43,21 +43,23 @@ public abstract class HeldItemRendererMixin {
         Arm arm = isMainHand ? player.getMainArm() : player.getMainArm().getOpposite();
         matrices.push();
         if (item.getItem() == PebbleMod.PebbleItem) {
+            // I'm sorry
             float x, y, z, w, u, v;
             int o = isMainHand ? 1 : -1;
 
             ((HeldItemRendererInvoker) this).invokeApplyEquipOffset(matrices, arm, equipProgress);
-            matrices.translate((double) ((float) o * -0.2785682F), 0.18344387412071228D, 0.15731531381607056D);
-            matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(-13.935F));
-            matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion((float) o * 35.3F));
-            matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion((float) o * -9.785F));
 
             // the `- tickDelta` is necessary to make the animation smooth
             // But causes the item to vibrate when not being used, so I use a conditional
             // I'm not really sure how the BowItem uses this code without conditional without vibrating
             int itemUseTimeLeft = this.client.player.getItemUseTimeLeft();
-            u = itemUseTimeLeft != 0 ? (float) item.getMaxUseTime() - ((float) itemUseTimeLeft - tickDelta + 1.0F) : 72000;
-            System.out.println(this.client.player.getItemUseTimeLeft());
+            u = itemUseTimeLeft != 0 ? (float) item.getMaxUseTime() - ((float) itemUseTimeLeft - tickDelta + 1.0F) : item.getMaxUseTime();
+
+            matrices.translate((double) ((float) o * -0.2785682F), 0.18344387412071228D, 0.15731531381607056D);
+            matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(-13.935F));
+            matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion((float) o * 35.3F));
+            matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion((float) o * -9.785F));
+
             v = u / (float) PebbleItem.maxChargeTimeTicks;
             v = (v * v + v * 2.0F) / 3.0F;
             if (v > 1.0F) {
@@ -75,6 +77,7 @@ public abstract class HeldItemRendererMixin {
             matrices.scale(1.0F, 1.0F, 1.0F + v * 0.2F);
             matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion((float) o * 45.0F));
             this.renderItem(player, item, isMainHand ? ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND : ModelTransformation.Mode.FIRST_PERSON_LEFT_HAND, !isMainHand, matrices, vertexConsumers, light);
+
             matrices.pop();
             info.cancel();
         }
