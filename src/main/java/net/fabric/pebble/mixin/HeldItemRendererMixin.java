@@ -48,10 +48,7 @@ public abstract class HeldItemRendererMixin {
             int o = isMainHand ? 1 : -1;
 
             ((HeldItemRendererInvoker) this).invokeApplyEquipOffset(matrices, arm, equipProgress);
-
-            // the `- tickDelta` is necessary to make the animation smooth
-            // But causes the item to vibrate when not being used, so I use a conditional
-            // I'm not really sure how the BowItem uses this code without conditional without vibrating
+            
             int itemUseTimeLeft = this.client.player.getItemUseTimeLeft();
             u = itemUseTimeLeft != 0 ? (float) item.getMaxUseTime() - ((float) itemUseTimeLeft - tickDelta + 1.0F) : item.getMaxUseTime();
 
