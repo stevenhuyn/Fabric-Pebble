@@ -41,14 +41,13 @@ public abstract class HeldItemRendererMixin {
         // Code below largely collected from HeldItemRenderer.renderFirstPersonItem
         boolean isMainHand = hand == Hand.MAIN_HAND;
         Arm arm = isMainHand ? player.getMainArm() : player.getMainArm().getOpposite();
-        matrices.push();
         if (item.getItem() == PebbleMod.PebbleItem) {
             // I'm sorry
             float x, y, z, w, u, v;
             int o = isMainHand ? 1 : -1;
 
             ((HeldItemRendererInvoker) this).invokeApplyEquipOffset(matrices, arm, equipProgress);
-            
+
             int itemUseTimeLeft = this.client.player.getItemUseTimeLeft();
             u = itemUseTimeLeft != 0 ? (float) item.getMaxUseTime() - ((float) itemUseTimeLeft - tickDelta + 1.0F) : item.getMaxUseTime();
 
