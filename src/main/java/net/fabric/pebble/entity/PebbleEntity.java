@@ -90,6 +90,18 @@ public class PebbleEntity extends ThrownItemEntity {
         }
     }
 
+    @Override
+    @Environment(EnvType.CLIENT)
+    public boolean shouldRender(double distance) {
+        double d = this.getBoundingBox().getAverageSideLength() * 10.0D;
+        if (Double.isNaN(d)) {
+            d = 4.0D;
+        }
+
+        d *= 64.0D;
+        return distance < d * d;
+    }
+
     // called on collision with a block
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
