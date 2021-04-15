@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 
 public class PebbleEntity extends ThrownItemEntity {
     public Boolean isCritical = false;
+    public Float pullProgress = 0.0f;
 
     public PebbleEntity(EntityType<? extends ThrownItemEntity> entityType, World world) {
         super(entityType, world);
@@ -47,7 +48,7 @@ public class PebbleEntity extends ThrownItemEntity {
 
     @Override
     public Packet<?> createSpawnPacket() {
-        return EntitySpawnPacket.create(this, PebbleModClient.PEBBLE_PACKET_ID, isCritical);
+        return EntitySpawnPacket.create(this, PebbleModClient.PEBBLE_PACKET_ID, isCritical, pullProgress);
     }
 
     protected void onEntityHit(EntityHitResult entityHitResult) { // called on entity hit.
