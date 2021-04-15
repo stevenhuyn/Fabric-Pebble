@@ -52,7 +52,7 @@ public class PebbleItem extends BowItem {
                     SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.NEUTRAL, 0.5F, 1F); // plays a globalSoundEvent
 
             Boolean isCritical = useTicks >= maxChargeTimeTicks;
-            PebbleEntity pebbleEntity = new PebbleEntity(world, livingEntity, isCritical);
+            PebbleEntity pebbleEntity = new PebbleEntity(world, livingEntity, isCritical, getPebblePullProgress(useTicks));
             pebbleEntity.setItem(itemStack);
             pebbleEntity.setProperties(livingEntity, livingEntity.pitch, livingEntity.yaw, 0.0f,
                     getPullMultiplier(useTicks) * baseForce, 0f);
@@ -72,10 +72,11 @@ public class PebbleItem extends BowItem {
 
     // The power of the sigmoid function!! hazzuh!
     public float getPullMultiplier(int useTicks) {
-        // Gets progress between 0 < 1
-        float progress = useTicks > maxChargeTimeTicks ? 1F : (float) useTicks / maxChargeTimeTicks;
-
         // Modifies by a sigmoid variant function
-        return (1F / (1F + (float) Math.exp(-10 * (progress - 0.3F))));
+        return (1F / (1F + (float) Math.exp(-10 * (getPebblePullProgress(useTicks) - 0.3F))));
+    }
+
+    public float getPebblePullProgress(int useTicks) {
+        return useTicks > maxChargeTimeTicks ? 1F : (float) useTicks / maxChargeTimeTicks;
     }
 }
