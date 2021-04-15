@@ -18,6 +18,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class PebbleEntity extends ThrownItemEntity {
@@ -104,10 +105,12 @@ public class PebbleEntity extends ThrownItemEntity {
         super.tick();
         if (this.world.isClient) {
             if (isCritical) {
-                ParticleEffect particleEffect = (ParticleEffect) ParticleTypes.CRIT;
-                for (int i = 0; i < 8; ++i) {
-                    // TODO: Centre the particle effects
-                    this.world.addParticle(particleEffect, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+                Vec3d velocity = this.getVelocity();
+                double d = velocity.x;
+                double e = velocity.y;
+                double g = velocity.z;
+                for (int i = 4; i < 8; i++) {
+                    this.world.addParticle(ParticleTypes.CRIT, this.getX() - d * (double) i / 4.0D, this.getY() + 0.1F - e * (double) i / 4.0D , this.getZ() - g * (double) i / 4.0D, -d, -e + 0.2F, -g);
                 }
             }
         }
