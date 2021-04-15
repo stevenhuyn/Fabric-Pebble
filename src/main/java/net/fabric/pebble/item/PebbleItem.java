@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 
 public class PebbleItem extends BowItem {
 
-    public static final float baseForce = 1.5f;
+    public static final float baseForce = 1.8f;
     public static final int maxChargeTimeTicks = 12;
     public static final int minChargeTimeTicks = 3;
 
