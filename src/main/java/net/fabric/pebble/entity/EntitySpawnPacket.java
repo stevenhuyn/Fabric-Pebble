@@ -11,7 +11,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 
 public class EntitySpawnPacket {
-    public static Packet<?> create(Entity e, Identifier packetID, Boolean isCritical) {
+    public static Packet<?> create(Entity e, Identifier packetID, Boolean isCritical, float pullProgress) {
         if (e.world.isClient)
             throw new IllegalStateException("SpawnPacketUtil.create called on the logical client!");
 
@@ -25,6 +25,7 @@ public class EntitySpawnPacket {
         PacketBufUtil.writeAngle(byteBuf, e.yaw);
 
         byteBuf.writeBoolean(isCritical);
+        byteBuf.writeFloat(pullProgress);
         return ServerPlayNetworking.createS2CPacket(packetID, byteBuf);
     }
 

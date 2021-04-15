@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 
 public class PebbleEntity extends ThrownItemEntity {
     public Boolean isCritical = false;
+    public Float pullProgress = 0.0f;
 
     public PebbleEntity(EntityType<? extends ThrownItemEntity> entityType, World world) {
         super(entityType, world);
@@ -31,9 +32,10 @@ public class PebbleEntity extends ThrownItemEntity {
         super(PebbleMod.PebbleEntityType, owner, world);
     }
 
-    public PebbleEntity(World world, LivingEntity owner, Boolean isCritical) {
+    public PebbleEntity(World world, LivingEntity owner, Boolean isCritical, Float pullProgress) {
         super(PebbleMod.PebbleEntityType, owner, world);
         this.isCritical = isCritical;
+        this.pullProgress = pullProgress;
     }
 
     public PebbleEntity(World world, double x, double y, double z) {
@@ -47,13 +49,16 @@ public class PebbleEntity extends ThrownItemEntity {
 
     @Override
     public Packet<?> createSpawnPacket() {
-        return EntitySpawnPacket.create(this, PebbleModClient.PEBBLE_PACKET_ID, isCritical);
+        return EntitySpawnPacket.create(this, PebbleModClient.PEBBLE_PACKET_ID, isCritical, pullProgress);
     }
 
     protected void onEntityHit(EntityHitResult entityHitResult) { // called on entity hit.
         super.onEntityHit(entityHitResult);
         Entity entity = entityHitResult.getEntity(); // sets a new Entity instance as the EntityHitResult (victim)
-        int damage = isCritical ? 3 : 4;
+
+        int damage = (int) Math.ceil(this.pullProgress * 4);
+        damage += this.isCritical ? 1 : 0;
+
         entity.damage(DamageSource.thrownProjectile(this, this.getOwner()), (float) damage); // deals damage
 
         // checks if entity is an instance of LivingEntity (meaning it is not a boat or
