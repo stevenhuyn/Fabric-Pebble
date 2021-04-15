@@ -36,7 +36,6 @@ public class PebbleEntity extends ThrownItemEntity {
         super(PebbleMod.PebbleEntityType, owner, world);
         this.isCritical = isCritical;
         this.pullProgress = pullProgress;
-        System.out.println(pullProgress);
     }
 
     public PebbleEntity(World world, double x, double y, double z) {
