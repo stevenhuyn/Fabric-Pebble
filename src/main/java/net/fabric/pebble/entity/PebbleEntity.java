@@ -36,6 +36,7 @@ public class PebbleEntity extends ThrownItemEntity {
         super(PebbleMod.PebbleEntityType, owner, world);
         this.isCritical = isCritical;
         this.pullProgress = pullProgress;
+        System.out.println(pullProgress);
     }
 
     public PebbleEntity(World world, double x, double y, double z) {
@@ -55,7 +56,10 @@ public class PebbleEntity extends ThrownItemEntity {
     protected void onEntityHit(EntityHitResult entityHitResult) { // called on entity hit.
         super.onEntityHit(entityHitResult);
         Entity entity = entityHitResult.getEntity(); // sets a new Entity instance as the EntityHitResult (victim)
-        int damage = isCritical ? 3 : 4;
+
+        int damage = (int) Math.ceil(this.pullProgress * 4);
+        damage += this.isCritical ? 1 : 0;
+
         entity.damage(DamageSource.thrownProjectile(this, this.getOwner()), (float) damage); // deals damage
 
         // checks if entity is an instance of LivingEntity (meaning it is not a boat or
