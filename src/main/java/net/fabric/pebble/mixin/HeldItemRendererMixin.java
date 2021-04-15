@@ -62,19 +62,30 @@ public abstract class HeldItemRendererMixin {
                 v = 1.0F;
             }
 
-            if (v > 0.1F) {
-                w = MathHelper.sin((u - 0.1F) * 1.3F);
-                x = v - 0.1F;
-                y = w * x;
-                matrices.translate((double) (y * 0.0F), (double) (y * 0.004F), (double) (y * 0.0F));
-            }
+            // The vibration like the bow
+//            if (v > 0.1F) {
+//                w = MathHelper.sin((u - 0.1F) * 1.3F);
+//                x = v - 0.1F;
+//                y = w * x;
+//                matrices.translate((double) (y * 0.0F), (double) (y * 0.04F), (double) (y * 0.0F));
+//            }
 
-            matrices.translate((double) (v * 0.0F), (double) (v * 0.0F), (double) (v * 0.04F));
-            matrices.scale(1.0F, 1.0F, 1.0F + v * 0.2F);
+            matrices.translate((double) (v * 0.0F), (double) (v * 0.0F), (double) (v * 0.15F));
+
+            matrices.scale(1.0F, 1.0F, 1.0F + v * 0.1F);
+
             matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion((float) o * 45.0F));
+
             this.renderItem(player, item, isMainHand ? ModelTransformation.Mode.FIRST_PERSON_RIGHT_HAND : ModelTransformation.Mode.FIRST_PERSON_LEFT_HAND, !isMainHand, matrices, vertexConsumers, light);
 
             matrices.pop();
+
+            // Rendering the arm
+            matrices.push();
+            matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion((float) u * 45.0F));
+            ((HeldItemRendererInvoker) this).invokeRenderArmHoldingItem(matrices, vertexConsumers, light, equipProgress, swingProgress, arm);
+            matrices.pop();
+
             info.cancel();
         }
     }
