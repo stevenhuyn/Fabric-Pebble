@@ -63,14 +63,15 @@ public abstract class HeldItemRendererMixin {
             }
 
             // The vibration like the bow
-//            if (v > 0.1F) {
-//                w = MathHelper.sin((u - 0.1F) * 1.3F);
-//                x = v - 0.1F;
-//                y = w * x;
-//                matrices.translate((double) (y * 0.0F), (double) (y * 0.04F), (double) (y * 0.0F));
-//            }
+            if (v > 0.1F) {
+                // Made the period of the sine function longer
+                w = MathHelper.sin((0.3f * u - 0.1F) * 1.3F);
+                x = v - 0.1F;
+                y = w * x;
+                matrices.translate((double) (y * 0.0F), (double) (y * 0.004F), (double) (y * 0.0F));
+            }
 
-            matrices.translate((double) (v * 0.0F), (double) (v * 0.0F), (double) (v * 0.15F));
+            matrices.translate((double) (v * 0.0F), (double) (0.25F*(-v*v + 1.8*v)), (double) (v * 0.15F));
 
             matrices.scale(1.0F, 1.0F, 1.0F + v * 0.1F);
 
@@ -80,11 +81,11 @@ public abstract class HeldItemRendererMixin {
 
             matrices.pop();
 
-            // Rendering the arm
-            matrices.push();
-            matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion((float) u * 45.0F));
-            ((HeldItemRendererInvoker) this).invokeRenderArmHoldingItem(matrices, vertexConsumers, light, equipProgress, swingProgress, arm);
-            matrices.pop();
+            // Rendering the arm aswell, (Benched right now)
+//            matrices.push();
+//            matrices.multiply(Vector3f.NEGATIVE_X.getDegreesQuaternion((float) v* -25.0F));
+//            ((HeldItemRendererInvoker) this).invokeRenderArmHoldingItem(matrices, vertexConsumers, light, equipProgress, swingProgress, arm);
+//            matrices.pop();
 
             info.cancel();
         }
