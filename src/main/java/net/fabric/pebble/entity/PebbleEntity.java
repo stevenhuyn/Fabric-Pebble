@@ -32,9 +32,10 @@ public class PebbleEntity extends ThrownItemEntity {
         super(PebbleMod.PebbleEntityType, owner, world);
     }
 
-    public PebbleEntity(World world, LivingEntity owner, Boolean isCritical) {
+    public PebbleEntity(World world, LivingEntity owner, Boolean isCritical, Float pullProgress) {
         super(PebbleMod.PebbleEntityType, owner, world);
         this.isCritical = isCritical;
+        this.pullProgress = pullProgress;
     }
 
     public PebbleEntity(World world, double x, double y, double z) {
