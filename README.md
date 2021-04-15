@@ -2,7 +2,7 @@
 
 ## Throw Pebbles!
 
-![Throwing a pebble at an iron golem who ends up killing me](/media/pebble.gif)
+## [See Video Example Here](https://streamable.com/o5lq8k)
 
 ![Crafting Recipe, Shapeless 1 cobble -> 4 pebbles](/media/recipe.png)
 
