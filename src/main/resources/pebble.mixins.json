@@ -5,8 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [],
   "client": [
-    "HeldItemRendererMixin",
-    "HeldItemRendererInvoker"
+    "HeldItemRendererMixin"
   ],
   "server": [],
   "injectors": {
