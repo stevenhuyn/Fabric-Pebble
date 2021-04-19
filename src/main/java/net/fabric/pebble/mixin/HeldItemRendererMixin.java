@@ -36,7 +36,7 @@ public abstract class HeldItemRendererMixin {
 
 
     @Inject(at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/item/ItemStack;getUseAction()Lnet/minecraft/util/UseAction;"), method = "renderFirstPersonItem", cancellable = true)
-    private void init(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo info) {
+    private void pebblePullAnimation(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo info) {
 
         // Code below largely collected from HeldItemRenderer.renderFirstPersonItem
         boolean isMainHand = hand == Hand.MAIN_HAND;
