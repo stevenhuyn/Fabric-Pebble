@@ -5,6 +5,8 @@ import net.fabric.pebble.item.PebbleItem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
@@ -24,16 +26,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(HeldItemRenderer.class)
 public abstract class HeldItemRendererMixin {
 
-    // Private method, so can't shadow it
-    //	@Shadow abstract void applyEquipOffset(MatrixStack matrices, Arm arm, float equipProgress);
-
     @Shadow
     @Final
     private MinecraftClient client;
 
     @Shadow
+    @Final
+    private EntityRenderDispatcher renderManager;
+
+    @Shadow
     public abstract void renderItem(LivingEntity entity, ItemStack stack, ModelTransformation.Mode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light);
 
+    @Shadow
+    private void applyEquipOffset(MatrixStack matrices, Arm arm, float equipProgress) {}
 
     @Inject(at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/item/ItemStack;getUseAction()Lnet/minecraft/util/UseAction;"), method = "renderFirstPersonItem", cancellable = true)
     private void pebblePullAnimation(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo info) {
@@ -46,7 +51,7 @@ public abstract class HeldItemRendererMixin {
             float x, y, z, w, u, v;
             int o = isMainHand ? 1 : -1;
 
-            ((HeldItemRendererInvoker) this).invokeApplyEquipOffset(matrices, arm, equipProgress);
+            this.applyEquipOffset(matrices, arm, equipProgress);
 
             int itemUseTimeLeft = this.client.player.getItemUseTimeLeft();
             u = itemUseTimeLeft != 0 ? (float) item.getMaxUseTime() - ((float) itemUseTimeLeft - tickDelta + 1.0F) : item.getMaxUseTime();
@@ -77,5 +82,37 @@ public abstract class HeldItemRendererMixin {
             matrices.pop();
             info.cancel();
         }
+    }
+
+    @Inject(at = @At("HEAD"), method="renderArmHoldingItem", cancellable = true)
+    private void pebbleThirdPersonAnimation(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, float equipProgress, float swingProgress, Arm arm, CallbackInfo info) {
+        System.out.println("Fuck");
+        boolean bl = arm != Arm.LEFT;
+        float f = bl ? 1.0F : -1.0F;
+        float g = MathHelper.sqrt(swingProgress);
+        float h = -0.3F * MathHelper.sin(g * 3.1415927F);
+        float i = 0.4F * MathHelper.sin(g * 6.2831855F);
+        float j = -0.4F * MathHelper.sin(swingProgress * 3.1415927F);
+        matrices.translate((double)(f * (h + 0.64000005F)), (double)(i + -0.6F + equipProgress * -0.6F), (double)(j + -0.71999997F));
+        matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(f * 45.0F));
+        float k = MathHelper.sin(swingProgress * swingProgress * 3.1415927F);
+        float l = MathHelper.sin(g * 3.1415927F);
+        matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(f * l * 70.0F));
+        matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(f * k * -20.0F));
+        AbstractClientPlayerEntity abstractClientPlayerEntity = this.client.player;
+        this.client.getTextureManager().bindTexture(abstractClientPlayerEntity.getSkinTexture());
+        matrices.translate((double)(f * -1.0F), 3.5999999046325684D, 3.5D);
+        matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(f * 120.0F));
+        matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(200.0F));
+        matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(f * -135.0F));
+        matrices.translate((double)(f * 5.6F), 0.0D, 0.0D);
+        PlayerEntityRenderer playerEntityRenderer = (PlayerEntityRenderer)this.renderManager.getRenderer(abstractClientPlayerEntity);
+        if (bl) {
+            playerEntityRenderer.renderRightArm(matrices, vertexConsumers, light, abstractClientPlayerEntity);
+        } else {
+            playerEntityRenderer.renderLeftArm(matrices, vertexConsumers, light, abstractClientPlayerEntity);
+        }
+
+        info.cancel();
     }
 }
