@@ -10,12 +10,13 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 public class PebbleItem extends BowItem {
 
     public static final float baseForce = 1.8f;
-    public static final int maxChargeTimeTicks = 12;
+    public static final int maxChargeTimeTicks = 9;
     public static final int minChargeTimeTicks = 3;
 
     public PebbleItem(Settings settings) {
@@ -67,7 +68,11 @@ public class PebbleItem extends BowItem {
         if (!playerEntity.abilities.creativeMode) {
             itemStack.decrement(1); // decrements itemStack if user is not in creative mode
         }
+    }
 
+    @Override
+    public UseAction getUseAction(ItemStack stack) {
+        return UseAction.SPEAR;
     }
 
     // The power of the sigmoid function!! hazzuh!

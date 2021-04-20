@@ -5,6 +5,8 @@ import net.fabric.pebble.item.PebbleItem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
@@ -24,9 +26,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(HeldItemRenderer.class)
 public abstract class HeldItemRendererMixin {
 
-    // Private method, so can't shadow it
-    //	@Shadow abstract void applyEquipOffset(MatrixStack matrices, Arm arm, float equipProgress);
-
     @Shadow
     @Final
     private MinecraftClient client;
@@ -34,9 +33,12 @@ public abstract class HeldItemRendererMixin {
     @Shadow
     public abstract void renderItem(LivingEntity entity, ItemStack stack, ModelTransformation.Mode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light);
 
+    @Shadow
+    private void applyEquipOffset(MatrixStack matrices, Arm arm, float equipProgress) {
+    }
 
     @Inject(at = @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/item/ItemStack;getUseAction()Lnet/minecraft/util/UseAction;"), method = "renderFirstPersonItem", cancellable = true)
-    private void init(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo info) {
+    private void pebblePullAnimation(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo info) {
 
         // Code below largely collected from HeldItemRenderer.renderFirstPersonItem
         boolean isMainHand = hand == Hand.MAIN_HAND;
@@ -46,7 +48,7 @@ public abstract class HeldItemRendererMixin {
             float x, y, z, w, u, v;
             int o = isMainHand ? 1 : -1;
 
-            ((HeldItemRendererInvoker) this).invokeApplyEquipOffset(matrices, arm, equipProgress);
+            this.applyEquipOffset(matrices, arm, equipProgress);
 
             int itemUseTimeLeft = this.client.player.getItemUseTimeLeft();
             u = itemUseTimeLeft != 0 ? (float) item.getMaxUseTime() - ((float) itemUseTimeLeft - tickDelta + 1.0F) : item.getMaxUseTime();
