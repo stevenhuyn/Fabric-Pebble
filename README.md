@@ -2,7 +2,8 @@
 
 ## Throw Pebbles!
 
-## [See Video Example Here](https://streamable.com/o5lq8k)
+### Youtube video below:
+[![Example video for fabric pebble](https://img.youtube.com/vi/4Y5pkeZR2UY/0.jpg)](https://www.youtube.com/watch?v=4Y5pkeZR2UY)
 
 ![Crafting Recipe, Shapeless 1 cobble -> 4 pebbles](/media/recipe.png)
 
